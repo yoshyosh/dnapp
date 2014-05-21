@@ -1,1 +1,47 @@
+PODS:
+  - ACSimpleKeychain (0.0.1)
+  - AFNetworking (2.0.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+    - AFNetworking/UIKit
+  - AFNetworking/NSURLConnection (2.0.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.0.3):
+    - AFNetworking/NSURLConnection
+  - AFNetworking/Reachability (2.0.3)
+  - AFNetworking/Security (2.0.3)
+  - AFNetworking/Serialization (2.0.3)
+  - AFNetworking/UIKit (2.0.3):
+    - AFNetworking/NSURLConnection
+  - Canvas (0.1.1)
+  - NSDate+TimeAgo (1.0.3)
+  - SDWebImage (3.6):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.6)
+  - SOCKit (1.1)
+  - TPKeyboardAvoiding (1.2.3)
+
+DEPENDENCIES:
+  - ACSimpleKeychain
+  - AFNetworking (~> 2.0.2)
+  - Canvas
+  - NSDate+TimeAgo (~> 1.0.2)
+  - SDWebImage (~> 3.5)
+  - SOCKit (~> 1.1)
+  - TPKeyboardAvoiding
+
+SPEC CHECKSUMS:
+  ACSimpleKeychain: 2b61422885d2c482e841be1573f9dfcc0d65b839
+  AFNetworking: e499052cbf3d743e9bb727bb37adb9dc2547ba15
+  Canvas: f1911025fc9ec9c7339df6e4399c90c87ce6b631
+  NSDate+TimeAgo: ca09306750ac2564418042aa10cf8365c36d2cee
+  SDWebImage: 7eb273e54ca8a2e506ad9bd5e80c35b2a4d7c95e
+  SOCKit: 8871d058926a6c6cc144f0c5eee82c5d0ec274a3
+  TPKeyboardAvoiding: 17995aaa6db26ac2a9fa8714a86509c5888f0392
+
 COCOAPODS: 0.32.1

@@ -23,6 +23,11 @@
 		33F8F3371925EA5900D5DE6C /* DNAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F8F3361925EA5900D5DE6C /* DNAppTests.m */; };
 		33F8F3421926E53B00D5DE6C /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F8F3411926E53B00D5DE6C /* HomeViewController.m */; };
 		33F8F38B1929A37600D5DE6C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 33F8F38A1929A37600D5DE6C /* Podfile */; };
+		33F8F38E1929D36100D5DE6C /* DNAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F8F38D1929D36100D5DE6C /* DNAPI.m */; };
+		33F8F391192A924100D5DE6C /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F8F390192A924100D5DE6C /* HomeTableViewController.m */; };
+		33F8F394192A933E00D5DE6C /* StoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F8F393192A933E00D5DE6C /* StoryTableViewCell.m */; };
+		33F8F397192ABB1A00D5DE6C /* ArticleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F8F396192ABB1A00D5DE6C /* ArticleTableViewController.m */; };
+		E8AD37355B994C20B3CC88B3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEFD3F4E90CF42069C4B7E80 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +62,17 @@
 		33F8F3361925EA5900D5DE6C /* DNAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DNAppTests.m; sourceTree = "<group>"; };
 		33F8F3401926E53B00D5DE6C /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		33F8F3411926E53B00D5DE6C /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		33F8F38A1929A37600D5DE6C /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		33F8F38A1929A37600D5DE6C /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		33F8F38C1929D36100D5DE6C /* DNAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAPI.h; sourceTree = "<group>"; };
+		33F8F38D1929D36100D5DE6C /* DNAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAPI.m; sourceTree = "<group>"; };
+		33F8F38F192A924100D5DE6C /* HomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTableViewController.h; sourceTree = "<group>"; };
+		33F8F390192A924100D5DE6C /* HomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTableViewController.m; sourceTree = "<group>"; };
+		33F8F392192A933E00D5DE6C /* StoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewCell.h; sourceTree = "<group>"; };
+		33F8F393192A933E00D5DE6C /* StoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryTableViewCell.m; sourceTree = "<group>"; };
+		33F8F395192ABB1A00D5DE6C /* ArticleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleTableViewController.h; sourceTree = "<group>"; };
+		33F8F396192ABB1A00D5DE6C /* ArticleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleTableViewController.m; sourceTree = "<group>"; };
+		E70922F645174BD6848F0775 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		EEFD3F4E90CF42069C4B7E80 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +83,7 @@
 				33F8F30E1925EA5900D5DE6C /* CoreGraphics.framework in Frameworks */,
 				33F8F3101925EA5900D5DE6C /* UIKit.framework in Frameworks */,
 				33F8F30C1925EA5900D5DE6C /* Foundation.framework in Frameworks */,
+				E8AD37355B994C20B3CC88B3 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +108,7 @@
 				33F8F3301925EA5900D5DE6C /* DNAppTests */,
 				33F8F30A1925EA5900D5DE6C /* Frameworks */,
 				33F8F3091925EA5900D5DE6C /* Products */,
+				E70922F645174BD6848F0775 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,6 +128,7 @@
 				33F8F30D1925EA5900D5DE6C /* CoreGraphics.framework */,
 				33F8F30F1925EA5900D5DE6C /* UIKit.framework */,
 				33F8F32A1925EA5900D5DE6C /* XCTest.framework */,
+				EEFD3F4E90CF42069C4B7E80 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -121,10 +139,18 @@
 				33F8F31A1925EA5900D5DE6C /* AppDelegate.h */,
 				33F8F31B1925EA5900D5DE6C /* AppDelegate.m */,
 				33F8F31D1925EA5900D5DE6C /* Main.storyboard */,
+				33F8F392192A933E00D5DE6C /* StoryTableViewCell.h */,
+				33F8F393192A933E00D5DE6C /* StoryTableViewCell.m */,
 				33F8F3401926E53B00D5DE6C /* HomeViewController.h */,
 				33F8F3411926E53B00D5DE6C /* HomeViewController.m */,
+				33F8F38F192A924100D5DE6C /* HomeTableViewController.h */,
+				33F8F390192A924100D5DE6C /* HomeTableViewController.m */,
 				33F8F3201925EA5900D5DE6C /* ViewController.h */,
 				33F8F3211925EA5900D5DE6C /* ViewController.m */,
+				33F8F395192ABB1A00D5DE6C /* ArticleTableViewController.h */,
+				33F8F396192ABB1A00D5DE6C /* ArticleTableViewController.m */,
+				33F8F38C1929D36100D5DE6C /* DNAPI.h */,
+				33F8F38D1929D36100D5DE6C /* DNAPI.m */,
 				33F8F3231925EA5900D5DE6C /* Images.xcassets */,
 				33F8F3121925EA5900D5DE6C /* Supporting Files */,
 			);
@@ -167,9 +193,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 33F8F33A1925EA5900D5DE6C /* Build configuration list for PBXNativeTarget "DNApp" */;
 			buildPhases = (
+				A6A9D0C5B05A4D56B05B5A42 /* Check Pods Manifest.lock */,
 				33F8F3041925EA5900D5DE6C /* Sources */,
 				33F8F3051925EA5900D5DE6C /* Frameworks */,
 				33F8F3061925EA5900D5DE6C /* Resources */,
+				1C836DCCAFB64C3A946DE6DF /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -253,15 +281,52 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1C836DCCAFB64C3A946DE6DF /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6A9D0C5B05A4D56B05B5A42 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		33F8F3041925EA5900D5DE6C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33F8F394192A933E00D5DE6C /* StoryTableViewCell.m in Sources */,
 				33F8F3221925EA5900D5DE6C /* ViewController.m in Sources */,
+				33F8F397192ABB1A00D5DE6C /* ArticleTableViewController.m in Sources */,
 				33F8F31C1925EA5900D5DE6C /* AppDelegate.m in Sources */,
 				33F8F3181925EA5900D5DE6C /* main.m in Sources */,
 				33F8F3421926E53B00D5DE6C /* HomeViewController.m in Sources */,
+				33F8F391192A924100D5DE6C /* HomeTableViewController.m in Sources */,
+				33F8F38E1929D36100D5DE6C /* DNAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +448,7 @@
 		};
 		33F8F33B1925EA5900D5DE6C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E70922F645174BD6848F0775 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -396,6 +462,7 @@
 		};
 		33F8F33C1925EA5900D5DE6C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E70922F645174BD6848F0775 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -466,6 +533,7 @@
 				33F8F33C1925EA5900D5DE6C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		33F8F33D1925EA5900D5DE6C /* Build configuration list for PBXNativeTarget "DNAppTests" */ = {
 			isa = XCConfigurationList;
@@ -474,6 +542,7 @@
 				33F8F33F1925EA5900D5DE6C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
