@@ -7,12 +7,20 @@
 //
 
 #import "AppDelegate.h"
+#import "Mixpanel.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    // Mixpanel
+    #define MIXPANEL_TOKEN @"c5cda7c61b4db5ef7148473d5e868799"
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"App Launched"];
+    NSLog(@"Here did finish launching");
+    
     return YES;
 }
 							

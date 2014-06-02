@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		337C6242192C491A00241F63 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 337C6241192C491A00241F63 /* WebViewController.m */; };
+		33B34DCF1936A41300AB9B53 /* CommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B34DCE1936A41300AB9B53 /* CommentViewController.m */; };
+		33B34DD21937C53A00AB9B53 /* techno.wav in Resources */ = {isa = PBXBuildFile; fileRef = 33B34DD11937C53A00AB9B53 /* techno.wav */; };
 		33F8F30C1925EA5900D5DE6C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F8F30B1925EA5900D5DE6C /* Foundation.framework */; };
 		33F8F30E1925EA5900D5DE6C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F8F30D1925EA5900D5DE6C /* CoreGraphics.framework */; };
 		33F8F3101925EA5900D5DE6C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F8F30F1925EA5900D5DE6C /* UIKit.framework */; };
@@ -41,6 +44,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		337C6240192C491A00241F63 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		337C6241192C491A00241F63 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		33B34DCD1936A41300AB9B53 /* CommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentViewController.h; sourceTree = "<group>"; };
+		33B34DCE1936A41300AB9B53 /* CommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentViewController.m; sourceTree = "<group>"; };
+		33B34DD11937C53A00AB9B53 /* techno.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = techno.wav; sourceTree = "<group>"; };
 		33F8F3081925EA5900D5DE6C /* DNApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DNApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33F8F30B1925EA5900D5DE6C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		33F8F30D1925EA5900D5DE6C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -100,6 +108,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		33B34DD01937C53A00AB9B53 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				33B34DD11937C53A00AB9B53 /* techno.wav */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		33F8F2FF1925EA5900D5DE6C = {
 			isa = PBXGroup;
 			children = (
@@ -136,9 +152,14 @@
 		33F8F3111925EA5900D5DE6C /* DNApp */ = {
 			isa = PBXGroup;
 			children = (
+				33B34DD01937C53A00AB9B53 /* Sounds */,
 				33F8F31A1925EA5900D5DE6C /* AppDelegate.h */,
 				33F8F31B1925EA5900D5DE6C /* AppDelegate.m */,
 				33F8F31D1925EA5900D5DE6C /* Main.storyboard */,
+				33B34DCD1936A41300AB9B53 /* CommentViewController.h */,
+				33B34DCE1936A41300AB9B53 /* CommentViewController.m */,
+				337C6240192C491A00241F63 /* WebViewController.h */,
+				337C6241192C491A00241F63 /* WebViewController.m */,
 				33F8F392192A933E00D5DE6C /* StoryTableViewCell.h */,
 				33F8F393192A933E00D5DE6C /* StoryTableViewCell.m */,
 				33F8F3401926E53B00D5DE6C /* HomeViewController.h */,
@@ -268,6 +289,7 @@
 				33F8F3161925EA5900D5DE6C /* InfoPlist.strings in Resources */,
 				33F8F38B1929A37600D5DE6C /* Podfile in Resources */,
 				33F8F31F1925EA5900D5DE6C /* Main.storyboard in Resources */,
+				33B34DD21937C53A00AB9B53 /* techno.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +345,8 @@
 				33F8F3221925EA5900D5DE6C /* ViewController.m in Sources */,
 				33F8F397192ABB1A00D5DE6C /* ArticleTableViewController.m in Sources */,
 				33F8F31C1925EA5900D5DE6C /* AppDelegate.m in Sources */,
+				33B34DCF1936A41300AB9B53 /* CommentViewController.m in Sources */,
+				337C6242192C491A00241F63 /* WebViewController.m in Sources */,
 				33F8F3181925EA5900D5DE6C /* main.m in Sources */,
 				33F8F3421926E53B00D5DE6C /* HomeViewController.m in Sources */,
 				33F8F391192A924100D5DE6C /* HomeTableViewController.m in Sources */,

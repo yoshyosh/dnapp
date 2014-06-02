@@ -13,11 +13,15 @@
 #import "NSDate+TimeAgo.h"
 #import "ACSimpleKeychain.h"
 #import "ArticleTableViewController.h"
+#import "WebViewController.h"
+#import "Mixpanel.h"
 
-@interface HomeTableViewController ()
+@interface HomeTableViewController () <StoryTableViewCellDelegate, UIActionSheetDelegate>
 
 @property (nonatomic) NSDictionary *data;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingIndicator;
+- (IBAction)menuButtonDidPress:(id)sender;
+@property (nonatomic) NSString *APIURL;
 
 @end
 
@@ -45,8 +49,19 @@
         [self performSegueWithIdentifier:@"homeToLoginScene" sender:self];
     }
     
+    //Pull to refresh
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+    
+    self.APIURL = DNAPIStories;
+    // Get Data
+    [self getData];
+}
+
+- (void)getData {
     // Get data
-    NSURLRequest *request = [NSURLRequest requestWithPattern:DNAPIStories object:nil];
+    NSURLRequest *request = [NSURLRequest requestWithPattern:self.APIURL object:nil];
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionTask *task = [session dataTaskWithRequest:request
                                         completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -64,10 +79,29 @@
                                                 
                                                 // Hide loading
                                                 self.loadingIndicator.hidden = YES;
+                                                
+                                                // End refresh
+                                                [self.refreshControl endRefreshing];
                                             });
                                         }];
     [task resume];
-   
+
+}
+
+- (void)reloadDataFromBlank {
+    // Show blank
+    self.data = nil;
+    [self.tableView reloadData];
+    
+    //Show loading
+    self.loadingIndicator.hidden = NO;
+    //Get data
+    [self getData];
+}
+
+- (void)refresh {
+    // Get data
+    [self getData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -95,9 +129,61 @@
 {
     StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"storyCell" forIndexPath:indexPath];
     
+    [self configureCell:cell forIndexPath:indexPath];
+    
+    cell.delegate = self;
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    StoryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"storyCell"];
+    [self configureCell:cell forIndexPath:indexPath];
+    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    
+    // Change the cell height
+    return height + 1;
+    //return 88;
+}
+
+- (void)tableView:(UITableView *)tableView  didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // When user selects row
+    NSDictionary *story = [self.data valueForKey:@"stories"][indexPath.row];
+    // Perform segue
+
+    [self performSegueWithIdentifier:@"homeToWebScene" sender:story];
+    
+    //Delselect
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"homeToArticleScene"]) {
+        ArticleTableViewController *atvc = [segue destinationViewController];
+        // Send data to destination view controller
+        atvc.story = sender;
+    }
+    if ([segue.identifier isEqualToString:@"homeToWebScene"]) {
+        WebViewController *webViewController = [segue destinationViewController];
+        // Send data to destination view controller
+        NSString *fullURL = [sender valueForKey:@"url"];
+        webViewController.fullURL = fullURL;
+        webViewController.story = sender;
+    }
+}
+
+- (void)configureCell:(StoryTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *story = [[self.data valueForKey:@"stories"] objectAtIndex:indexPath.row];
     cell.titleLabel.text = story[@"title"];
-    cell.authorLabel.text = [NSString stringWithFormat:@"%@, %@", story[@"user_display_name"], story[@"user_job"]]; //Potentially needs null check
+    
+    if (story[@"user_job"] != [NSNull null]) {
+        cell.authorLabel.text = [NSString stringWithFormat:@"%@, %@", story[@"user_display_name"], story[@"user_job"]];
+    } else {
+        cell.authorLabel.text = [NSString stringWithFormat:@"%@", story[@"user_display_name"]];
+    }
+    
     cell.commentLabel.text = [NSString stringWithFormat:@"%@", story[@"comment_count"]];
     cell.upvoteLabel.text = [NSString stringWithFormat:@"%@", story[@"vote_count"]];
     // Configure the cell...
@@ -116,29 +202,26 @@
     // Remove accessory
     cell.accessoryType = UITableViewCellAccessoryNone;
     
-    return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 88;
-}
-
-- (void)tableView:(UITableView *)tableView  didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    // When user selects row
-    NSDictionary *story = [self.data valueForKey:@"stories"][indexPath.row];
-    // Perform segue
-
-    [self performSegueWithIdentifier:@"homeToArticleScene" sender:story];
     
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"homeToArticleScene"]) {
-        ArticleTableViewController *atvc = [segue destinationViewController];
-        // Send data to destination view controller
-        atvc.story = sender;
-    }
+    // Reset when cells are re-rendered
+    // Change button image
+    cell.upvoteImageView.image = [UIImage imageNamed:@"icon-upvote"];
+    // Change text color
+    cell.upvoteLabel.textColor = [UIColor colorWithRed:0.627 green:0.69 blue:0.745 alpha:1];
+    // Toggle
+    cell.isUpvoted = NO;
+    
+    //If upvoted
+    [DNUser isUpvotedWithStory:story completion:^(BOOL succeed, NSError *error) {
+        // Change button color
+        cell.upvoteImageView.image = [UIImage imageNamed:@"icon-upvote-active"];
+        // Change label color
+        cell.upvoteLabel.textColor = [UIColor colorWithRed:0.203 green:0.329 blue:0.835 alpha:1];
+        //Toggle upvoted
+        cell.isUpvoted = YES;
+    }];
+    
 }
 
 - (NSDate*)dateWithJSONString:(NSString*)dateStr
@@ -156,4 +239,89 @@
     return date;
 }
 
+#pragma mark StoryTableViewCellDelegate
+
+- (void)storyTableViewCell:(StoryTableViewCell *)cell upvoteButtonDidPress:(id)sender {
+    
+    //Get indexPath
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    //Get story for indexPath
+    NSDictionary *story = [[self.data valueForKey:@"stories"] objectAtIndex:indexPath.row];
+    
+    if (!cell.isUpvoted) {
+        // Change button color
+        cell.upvoteImageView.image = [UIImage imageNamed:@"icon-upvote-active"];
+        // Change label color
+        cell.upvoteLabel.textColor = [UIColor colorWithRed:0.203 green:0.329 blue:0.835 alpha:1];
+        //Toggle upvoted
+        cell.isUpvoted = YES;
+        [DNAPI upvoteWithStory:story];
+        
+        //Save to keychain
+        [DNUser saveUpvoteWithStory:story];
+        
+        //Increment vote count label
+        int voteCount = [[story valueForKey:@"vote_count"] intValue] + 1;
+        cell.upvoteLabel.text = [NSString stringWithFormat:@"%d", voteCount];
+        
+        //Pop animation
+        UIImageView *view = cell.upvoteImageView;
+        NSTimeInterval duration = 0.5;
+        NSTimeInterval delay = 0;
+        [UIView animateKeyframesWithDuration:duration/3 delay:delay options:0 animations:^{
+            view.transform = CGAffineTransformMakeScale(1.5, 1.5);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateKeyframesWithDuration:duration/3 delay:delay options:0 animations:^{
+                view.transform = CGAffineTransformMakeScale(0.7, 0.7);
+            } completion:^(BOOL finished) {
+                [UIView animateKeyframesWithDuration:duration/3 delay:0 options:0 animations:^{
+                    view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                } completion:nil];
+            }];
+        }];
+        
+    }
+}
+
+- (void)storyTableViewCell:(StoryTableViewCell *)cell commentButtonDidPress:(id)sender {
+    //Get indexPath
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    //Get story for indexPath
+    NSDictionary *story = [[self.data valueForKey:@"stories"] objectAtIndex:indexPath.row];
+    
+    [self performSegueWithIdentifier:@"homeToArticleScene" sender:story];
+}
+
+#pragma mark UIActionSheetDelegate
+
+- (IBAction)menuButtonDidPress:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Close" destructiveButtonTitle:nil otherButtonTitles:@"Top Stories", @"Recent", @"Logout", nil];
+    [actionSheet showInView:self.view];
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    if ([buttonTitle isEqualToString:@"Top Stories"]) {
+        self.APIURL = DNAPIStories;
+        [self reloadDataFromBlank];
+        self.navigationItem.title = buttonTitle;
+    }
+    else if ([buttonTitle isEqualToString:@"Recent"]) {
+        self.APIURL = DNAPIStoriesRecent;
+        [self reloadDataFromBlank];
+        self.navigationItem.title = buttonTitle;
+    }
+    else if ([buttonTitle isEqualToString:@"Logout"]){
+        // Remove token
+        ACSimpleKeychain *keychain = [ACSimpleKeychain defaultKeychain];
+        if ([keychain deleteCredentialsForUsername:@"token" service:@"DN"]){
+            NSLog(@"Deleted credentials for token");
+        }
+        // Reload view
+        [self viewDidLoad];
+    }
+}
 @end

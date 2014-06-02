@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "DNAPI.h"
 #import "ACSimpleKeychain.h"
+#import "Mixpanel.h"
 
 @interface ViewController ()
 @property (strong, nonatomic) IBOutlet UIView *dialogView;
@@ -38,7 +39,10 @@
     self.passwordTextfield.secureTextEntry = YES;
     
     [self.emailTextfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-
+    
+    // Mixpanel
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Login"];
 }
 
 - (IBAction)unwindFromView:(UIStoryboardSegue *)segue { }
@@ -149,7 +153,12 @@
                 if ([keychain storeUsername:@"token" password:@"" identifier:token forService:@"DN"]) {
                     NSLog(@"Saved token");
                 }
-                
+                // Mixpanel People
+                if (email) {
+                    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+                    [mixpanel identify:token];
+                    [mixpanel.people set:@{@"$email": email}];
+                }
             } else {
                 [self doErrorMessage];
             }

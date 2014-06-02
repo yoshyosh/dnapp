@@ -19,29 +19,38 @@ PODS:
   - AFNetworking/UIKit (2.0.3):
     - AFNetworking/NSURLConnection
   - Canvas (0.1.1)
+  - Mixpanel (2.3.6)
   - NSDate+TimeAgo (1.0.3)
   - SDWebImage (3.6):
     - SDWebImage/Core
   - SDWebImage/Core (3.6)
+  - SimpleAudioPlayer (0.1.2)
   - SOCKit (1.1)
   - TPKeyboardAvoiding (1.2.3)
+  - TTTAttributedLabel (1.10.0)
 
 DEPENDENCIES:
   - ACSimpleKeychain
   - AFNetworking (~> 2.0.2)
   - Canvas
+  - Mixpanel
   - NSDate+TimeAgo (~> 1.0.2)
   - SDWebImage (~> 3.5)
+  - SimpleAudioPlayer
   - SOCKit (~> 1.1)
   - TPKeyboardAvoiding
+  - TTTAttributedLabel
 
 SPEC CHECKSUMS:
-  ACSimpleKeychain: 2b61422885d2c482e841be1573f9dfcc0d65b839
-  AFNetworking: e499052cbf3d743e9bb727bb37adb9dc2547ba15
-  Canvas: f1911025fc9ec9c7339df6e4399c90c87ce6b631
-  NSDate+TimeAgo: ca09306750ac2564418042aa10cf8365c36d2cee
-  SDWebImage: 7eb273e54ca8a2e506ad9bd5e80c35b2a4d7c95e
-  SOCKit: 8871d058926a6c6cc144f0c5eee82c5d0ec274a3
-  TPKeyboardAvoiding: 17995aaa6db26ac2a9fa8714a86509c5888f0392
+  ACSimpleKeychain: 5a471ccf5c85d23dcb603e9690b448832b892433
+  AFNetworking: a4d0e9a64de9242986620dafd1b3cee3b413ac5c
+  Canvas: 45356a2e61087a776bfde5090676d290cf67f7f2
+  Mixpanel: 9aba38257fc4d2777ab5db1afc55e22bdfd57a4a
+  NSDate+TimeAgo: f3533e0198fab05b716368b19f8c2185d53d6f3b
+  SDWebImage: c6989652c1cdf27cbdf3f56957e2030f825af5bc
+  SimpleAudioPlayer: d73a7be79c4f96a06b2f0be9d073284fb270dd9d
+  SOCKit: d8d0dd3688ae1026c12367570da8fa8e1a6980fb
+  TPKeyboardAvoiding: ca26afa683d829cb96fe69b887fc8be4178f0b9a
+  TTTAttributedLabel: c3a11b538bc7beb4815f156e2ba4b066929e13f9
 
 COCOAPODS: 0.32.1

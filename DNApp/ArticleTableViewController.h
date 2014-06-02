@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface ArticleTableViewController : UITableViewController
+- (IBAction)upvoteBarButtonDidPress:(id)sender;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *upvoteBarButton;
 
 @property (nonatomic) NSDictionary *story;
 

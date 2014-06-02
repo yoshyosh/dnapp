@@ -10,8 +10,14 @@
 #import "StoryTableViewCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "NSDate+TimeAgo.h"
+#import "WebViewController.h"
+#import "DNAPI.h"
+#import "CommentViewController.h"
+#import "SimpleAudioPlayer.h"
+#import "Mixpanel.h"
 
-@interface ArticleTableViewController ()
+@interface ArticleTableViewController () <StoryTableViewCellDelegate>
+- (IBAction)commentBarButtonDidPress:(id)sender;
 
 @end
 
@@ -29,6 +35,51 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //Is this story upvoted?
+    [DNUser isUpvotedWithStory:self.story completion:^(BOOL succeed, NSError *error) {
+        self.upvoteBarButton.title = @"Upvoted";
+        self.upvoteBarButton.enabled = NO;
+    }];
+    
+    //Pull to refresh
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+    
+    // Mixpanel
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Article"];
+    
+    //Refresh from child view controller
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:@"updateParent" object:nil];
+}
+
+- (void)refresh {
+    //Play sound
+    [SimpleAudioPlayer playFile:@"techno.wav"];
+        // Get data
+    NSURLRequest *request = [NSURLRequest requestWithPattern:DNAPIStoriesId object:@{@"id":self.story[@"id"]}];
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                NSError *serializeError;
+                                                id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&serializeError];
+                                                double delayInSeconds = 1.0f;   // Just for debug
+                                                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                                    
+                                                    // Get response
+                                                    self.story = json[@"story"];
+                                                    
+                                                    // Reload data after Get
+                                                    [self.tableView reloadData];
+                                                    
+                                                    // End refresh
+                                                    [self.refreshControl endRefreshing];
+                                                });
+                                            }];
+        [task resume];
     
 }
 
@@ -58,6 +109,10 @@
     NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
     StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     [self configureCell:cell forIndexPath:indexPath];
+    
+    // Set delegate
+    cell.delegate = self;
+    
     return cell;
 }
 
@@ -69,9 +124,7 @@
     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
 
     // Change the cell height
-    NSLog(@"Height: %f", height);
     return height + 1;
-    //return 300;
 }
 
 #pragma mark - Private methods
@@ -90,7 +143,13 @@
         NSDictionary *story = self.story;
         
         cell.titleLabel.text = story[@"title"];
-        cell.authorLabel.text = [NSString stringWithFormat:@"%@, %@", story[@"user_display_name"], story[@"user_job"]]; //Potentially needs null check
+        
+        if (story[@"user_job"] != [NSNull null]) {
+            cell.authorLabel.text = [NSString stringWithFormat:@"%@, %@", story[@"user_display_name"], story[@"user_job"]];
+        } else {
+            cell.authorLabel.text = [NSString stringWithFormat:@"%@", story[@"user_display_name"]];
+        }
+        
         cell.commentLabel.text = [NSString stringWithFormat:@"%@", story[@"comment_count"]];
         cell.upvoteLabel.text = [NSString stringWithFormat:@"%@", story[@"vote_count"]];
         // Configure the cell...
@@ -106,9 +165,34 @@
         // Comment
         cell.descriptionLabel.text = [story valueForKeyPath:@"comment"];
         
+        // Reset when cells are re-rendered
+        // Change button image
+        cell.upvoteImageView.image = [UIImage imageNamed:@"icon-upvote"];
+        // Change text color
+        cell.upvoteLabel.textColor = [UIColor colorWithRed:0.627 green:0.69 blue:0.745 alpha:1];
+        // Toggle
+        cell.isUpvoted = NO;
+        
+        //If upvoted
+        [DNUser isUpvotedWithStory:story completion:^(BOOL succeed, NSError *error) {
+            // Change button color
+            cell.upvoteImageView.image = [UIImage imageNamed:@"icon-upvote-active"];
+            // Change label color
+            cell.upvoteLabel.textColor = [UIColor colorWithRed:0.203 green:0.329 blue:0.835 alpha:1];
+            //Toggle upvoted
+            cell.isUpvoted = YES;
+        }];
+        
     } else {
         NSDictionary *comment = self.story[@"comments"][indexPath.row-1];
-        cell.authorLabel.text = [NSString stringWithFormat:@"%@, %@", comment[@"user_display_name"], comment[@"user_job"]];
+        
+        if (comment[@"user_job"] != [NSNull null]) {
+            cell.authorLabel.text = [NSString stringWithFormat:@"%@, %@", comment[@"user_display_name"], comment[@"user_job"]];
+        } else {
+            cell.authorLabel.text = [NSString stringWithFormat:@"%@, %@", comment[@"user_display_name"], comment[@"user_job"]];
+        }
+        
+        
         cell.commentLabel.text = @"Reply";
         cell.upvoteLabel.text = [NSString stringWithFormat:@"%@", comment[@"vote_count"]];
         
@@ -122,6 +206,33 @@
         
         // Comment
         cell.descriptionLabel.text = [comment valueForKeyPath:@"body"];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // When user selects row
+    NSString *fullURL = [self.story valueForKey:@"url"];
+    
+    if (indexPath.row == 0) {
+        // Perform segue
+        
+        [self performSegueWithIdentifier:@"articleToWebScene" sender:fullURL];
+    }
+    
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"articleToWebScene"]) {
+        WebViewController *webViewController = [segue destinationViewController];
+        // Send data to destination view controller
+        webViewController.fullURL = sender;
+        webViewController.story = self.story;
+    }
+    if ([segue.identifier isEqualToString:@"articleToCommentScene"]) {
+        UINavigationController *navController = segue.destinationViewController;
+        CommentViewController *viewController = [navController viewControllers][0];
+        viewController.story = self.story;
     }
 }
 
@@ -141,6 +252,74 @@
     return date;
 }
 
+#pragma mark StoryTableViewCellDelegate
 
+- (void)storyTableViewCell:(StoryTableViewCell *)cell upvoteButtonDidPress:(id)sender {
+    [self upvoteStory:cell];
+}
 
+#pragma mark Private methods
+
+- (void)upvoteStory: (StoryTableViewCell *)cell {
+    //Get indexPath
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    //Get story for indexPath
+    NSDictionary *story = self.story;
+    
+    if (!cell.isUpvoted) {
+        // Change button color
+        cell.upvoteImageView.image = [UIImage imageNamed:@"icon-upvote-active"];
+        // Change label color
+        cell.upvoteLabel.textColor = [UIColor colorWithRed:0.203 green:0.329 blue:0.835 alpha:1];
+        //Toggle upvoted
+        cell.isUpvoted = YES;
+        
+        // Story only
+        if (indexPath.row == 0) {
+            //[DNAPI upvoteWithStory:story];
+            
+            //Save to keychain
+            //[DNUser saveUpvoteWithStory:story];
+            
+            //Increment vote count label
+            int voteCount = [[story valueForKey:@"vote_count"] intValue] + 1;
+            cell.upvoteLabel.text = [NSString stringWithFormat:@"%d", voteCount];
+        }
+        
+        //Pop animation
+        UIImageView *view = cell.upvoteImageView;
+        NSTimeInterval duration = 0.5;
+        NSTimeInterval delay = 0;
+        [UIView animateKeyframesWithDuration:duration/3 delay:delay options:0 animations:^{
+            view.transform = CGAffineTransformMakeScale(1.5, 1.5);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateKeyframesWithDuration:duration/3 delay:delay options:0 animations:^{
+                view.transform = CGAffineTransformMakeScale(0.7, 0.7);
+            } completion:^(BOOL finished) {
+                [UIView animateKeyframesWithDuration:duration/3 delay:0 options:0 animations:^{
+                    view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                } completion:nil];
+            }];
+        }];
+        
+    }
+    
+}
+
+- (IBAction)upvoteBarButtonDidPress:(id)sender {
+    //IndexPath of 0 is the story cell
+    StoryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"storyCell" forIndexPath:0];
+
+    //If story hasn't been upvoted, upvote and change the button title
+    if (!cell.isUpvoted) {
+        [self upvoteStory:cell];
+        self.upvoteBarButton.title = @"Upvoted";
+        self.upvoteBarButton.enabled = NO;
+    }
+}
+- (IBAction)commentBarButtonDidPress:(id)sender {
+    [self performSegueWithIdentifier:@"articleToCommentScene" sender:sender];
+}
 @end
